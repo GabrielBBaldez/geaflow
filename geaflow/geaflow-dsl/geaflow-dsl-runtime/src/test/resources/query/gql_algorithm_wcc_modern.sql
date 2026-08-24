@@ -17,32 +17,17 @@
  * under the License.
  */
 
-package org.apache.geaflow.cluster.util;
+CREATE TABLE tbl_result (
+  vid int,
+	component varchar
+) WITH (
+	type='file',
+	geaflow.dsl.file.path='${target}'
+);
 
-import java.security.Permission;
-import java.util.concurrent.atomic.AtomicBoolean;
-import org.apache.geaflow.common.exception.GeaflowRuntimeException;
+USE GRAPH modern;
 
-public class SystemExitSignalCatcher extends SecurityManager {
-
-    private AtomicBoolean hasSignal;
-
-    public SystemExitSignalCatcher(AtomicBoolean hasSignal) {
-        this.hasSignal = hasSignal;
-    }
-
-    @Override
-    public void checkPermission(Permission perm) {
-    }
-
-    @Override
-    public void checkPermission(Permission perm, Object context) {
-    }
-
-    @Override
-    public void checkExit(int status) {
-        super.checkExit(status);
-        hasSignal.set(true);
-        throw new GeaflowRuntimeException("throw exception instead of exit process");
-    }
-}
+INSERT INTO tbl_result
+CALL wcc() YIELD (vid, component)
+RETURN cast (vid as int), component
+;

@@ -22,57 +22,64 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>geaflow-store</artifactId>
         <groupId>org.apache.geaflow</groupId>
+        <artifactId>geaflow-dsl-connector</artifactId>
         <version>0.8.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>geaflow-store-rocksdb</artifactId>
+    <artifactId>geaflow-dsl-connector-mongodb</artifactId>
+
+    <properties>
+        <mongodb-driver.version>4.11.1</mongodb-driver.version>
+        <testcontainers.version>1.19.8</testcontainers.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.geaflow</groupId>
-            <artifactId>geaflow-store-api</artifactId>
+            <artifactId>geaflow-dsl-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.geaflow</groupId>
-            <artifactId>geaflow-state-common</artifactId>
+            <artifactId>geaflow-dsl-connector-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.geaflow</groupId>
-            <artifactId>geaflow-state-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geaflow</groupId>
-            <artifactId>geaflow-file-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geaflow</groupId>
-            <artifactId>geaflow-file-dfs</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geaflow</groupId>
-            <artifactId>geaflow-file-oss</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.rocksdb</groupId>
-            <artifactId>rocksdbjni</artifactId>
-            <version>${rocksdb.version}</version>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>${mongodb-driver.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
